@@ -1,5 +1,5 @@
 #################################
-#  CAMERA
+# CAMERA
 #################################
 
 from multiprocessing.connection import Listener
