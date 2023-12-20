@@ -1,5 +1,5 @@
 #################################
-# CCLI
+# CLIENT
 #################################
 
 from multiprocessing.connection import Client
@@ -13,80 +13,32 @@ def openConnection():
     return conn
 #################################
 
-def sndCmsRcvRsp(cmd):
+def sndCmdRcvRsp(cmd):
     conn.send( cmd )
     rcvdRsp = conn.recv()
     #print(rcvdRsp) 
     return rcvdRsp 
 #################################
 
-def twoPointNuc( manuallyStepping ):
-
-    print()
-    if not manuallyStepping:
-        rsp = sndCmsRcvRsp( [ 'sp8', 'capture1', -1 ] )
-        print(rsp) 
-        rsp = sndCmsRcvRsp( [ 'sp8', 'capture2', -1 ] )
-        print(rsp) 
-        rsp = sndCmsRcvRsp( [ 'sp8', 'calc1',    -1 ] )
-        print(rsp) 
-        rsp = sndCmsRcvRsp( [ 'sp8', 'calc2',    -1 ] )
-        print(rsp) 
-    else:
-
-        proceed = True
-        while proceed:
-            process = None
-            while process not in [ 'cp1', 'cp2', 'cl1', 'cl2', 'q' ]:
-                print()
-                print( ' Which command table do you want to execute from,' )
-                print( ' capt1, capt2, calc1, calc2, quit' )
-                process = input( ' cp1, cp2, cl1, cl2, q    --> '       )
-            if process == 'q': return 0
-    
-            step = None
-            while True:
-                print( ' Which step in the command table do you want to execute,' )
-                step = input( ' 1 thru N or q --> '       )
-                try: 
-                    step = int(step)
-                    break
-                except: 
-                    if step == 'q': return 0
-    
-            if   process == 'cp1': 
-                rsp = sndCmsRcvRsp([ 'sp8', 'capture1', step ])
-                print(rsp) 
-            elif process == 'cp2': 
-                rsp = sndCmsRcvRsp([ 'sp8', 'capture2', step ])
-                print(rsp) 
-            elif process == 'cl1': 
-                rsp = sndCmsRcvRsp([ 'sp8', 'calc1',    step ])
-                print(rsp) 
-            elif process == 'cl2': 
-                rsp = sndCmsRcvRsp([ 'sp8', 'calc2',    step ])
-                print(rsp) 
-            else: print( ' ERROR' )
-
-            while proceed not in [ 'c', 'q' ]:
-                proceed = input( ' Continue or Quit (c/q)  --> '       )
-            if proceed == 'q': return 0
-#################################
-    
-def getParm():
-    return 0
-def setParm():
-    return 0
+def add( parms ):
+    rsp = sndCmdRcvRsp( ['add', parms] )
+    print(rsp) 
+def mul( parms ):
+    rsp = sndCmdRcvRsp( ['mul', parms] )
+    print(rsp) 
+def div( parms ):
+    rsp = sndCmdRcvRsp( ['div', parms] )
+    print(rsp) 
 #################################
 
 if __name__ == '__main__':
 
     strToFunctDict = {
-    'tpnf'   : {'func': twoPointNuc, 'parm': False, 'menu': '   tpnf - Two Point NUC. '},
-    'tpns'   : {'func': twoPointNuc, 'parm': True,  'menu': '   tpns - Two Point NUC - Step. '},
+    'add' : {'func': add, 'parm': [1,3], 'menu': ' add '},
+    'mul' : {'func': mul, 'parm': [4,5], 'menu': ' mul '},
+    'div' : {'func': mul, 'parm': [6,7], 'menu': ' div '},
     }
 
-    
     conn = openConnection()
 
     while(1):
