@@ -1,10 +1,9 @@
-#################################
+#############################################################################
 # SERVER
-#################################
+# See comments at top of client.py,
+#############################################################################
 
 from multiprocessing.connection import Listener
-import pprint
-import time
 
 # Accept a conection from the client.
 def openConnection():
@@ -13,45 +12,43 @@ def openConnection():
     conn     = listener.accept()
     print (' Connection accepted from', listener.last_accepted)
     return conn,listener
-#################################
+#############################################################################
 
 def add( parms ):
     rsp = parms[0] + parms[1]
     return rsp
 
-def add( parms ):
+def mul( parms ):
     rsp = parms[0] * parms[1]
     return rsp
 
-def add( parms ):
+def div( parms ):
     rsp = parms[0] / parms[1]
     return rsp
-#################################
+#############################################################################
 
 if __name__ == '__main__':
 
+    strToFunctDict = { 'add' : add, 'mul' : mul, 'div' : div}
+
     conn,listener = openConnection()
+
     while True:
-
         recvdCmd = conn.recv()
-        #print(recvdCmd)
     
-        if   recvdCmd[0] == 'add':
-             serverToClientRsp = add( recvdCmd[1] )
+        cmd = recvdCmd[0]
 
-        elif recvdCmd[0] == 'mul':
-             serverToClientRsp = add( recvdCmd[1] )
-
-        elif recvdCmd[0] == 'div':
-             serverToClientRsp = div( recvdCmd[1] )
+        if cmd in strToFunctDict:
+            function = strToFunctDict[cmd]
+            params   = recvdCmd[1]
+            serverToClientRsp = function( params )
         
-        elif recvdCmd == 'close':
+        elif cmd == 'close':
+            listener.close()
             conn.close()
             break
 
         else:
             serverToClientRsp = 'ERROR'
 
-        conn.send( serverToClientRsp )
-
-    listener.close()
+        conn.send( serverToClientRsp ) # <-- sends a rsp to client
