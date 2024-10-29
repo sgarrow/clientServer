@@ -8,10 +8,10 @@ from multiprocessing.connection import Listener
 # Accept a conection from the client.
 def openConnection():
     address  = ('localhost', 6000)
-    listener = Listener(address, authkey=('secret password'.encode('utf-8'))) 
-    conn     = listener.accept()
-    print (' Connection accepted from', listener.last_accepted)
-    return conn,listener
+    aListener = Listener(address, authkey='secret password'.encode('utf-8'))
+    conn     = aListener.accept()
+    print (' Connection accepted from', aListener.last_accepted)
+    return conn,aListener
 #############################################################################
 
 def add( parms ):
@@ -31,24 +31,24 @@ if __name__ == '__main__':
 
     strToFunctDict = { 'add' : add, 'mul' : mul, 'div' : div}
 
-    conn,listener = openConnection()
+    connection,listener = openConnection()
 
     while True:
-        recvdCmd = conn.recv()
-    
+        recvdCmd = connection.recv()
+
         cmd = recvdCmd[0]
 
         if cmd in strToFunctDict:
             function = strToFunctDict[cmd]
             params   = recvdCmd[1]
             serverToClientRsp = function( params )
-        
+
         elif cmd == 'close':
             listener.close()
-            conn.close()
+            connection.close()
             break
 
         else:
             serverToClientRsp = 'ERROR'
 
-        conn.send( serverToClientRsp ) # <-- sends a rsp to client
+        connection.send( serverToClientRsp ) # <-- sends a rsp to client
