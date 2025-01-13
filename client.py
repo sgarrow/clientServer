@@ -41,6 +41,10 @@ def mul( connection, parms ):
 def div( connection, parms ):
     rsp = sndCmdRcvRsp(connection,['div', parms]) # <-- 2. call send/receive driver.
     return rsp
+
+def gv( connection, parms ):
+    rsp = sndCmdRcvRsp(connection,['gv', parms]) # <-- 2. call send/receive driver.
+    return rsp
 #############################################################################
 
 if __name__ == '__main__':
@@ -51,6 +55,7 @@ if __name__ == '__main__':
     'add' : {'func': add, 'parm': [1,5], 'conn': clientConn, 'menu': 'add '},
     'mul' : {'func': mul, 'parm': [2,9], 'conn': clientConn, 'menu': 'mul '},
     'div' : {'func': div, 'parm': [6,3], 'conn': clientConn, 'menu': 'div '},
+    'gv'  : {'func':  gv, 'parm': [6,3], 'conn': clientConn, 'menu': 'gv  '},
     }
 
     while True:
@@ -61,7 +66,7 @@ if __name__ == '__main__':
             params   = strToFunctDict[choice]['parm']
             clntConn = strToFunctDict[choice]['conn']
             rtnVal   = function( clntConn, params ) # <-- 1. request a cmd be sent to server.
-            print(rtnVal)
+            print('***',rtnVal)
 
         elif choice == 'm':
             print()

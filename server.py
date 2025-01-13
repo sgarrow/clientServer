@@ -25,11 +25,16 @@ def mul( parms ):
 def div( parms ):
     rsp = parms[0] / parms[1]
     return rsp
+
+ver = ' v0.1.0 - 12-Jan-2025'
+def gv( parms ):
+    rsp = parms[0] / parms[1]
+    return ver
 #############################################################################
 
 if __name__ == '__main__':
 
-    strToFunctDict = { 'add' : add, 'mul' : mul, 'div' : div}
+    strToFunctDict = { 'add' : add, 'mul' : mul, 'div' : div, 'gv' : gv}
 
     connection,listener = openConnection()
 
