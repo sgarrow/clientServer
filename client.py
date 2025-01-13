@@ -55,7 +55,7 @@ if __name__ == '__main__':
     'add' : {'func': add, 'parm': [1,5], 'conn': clientConn, 'menu': 'add '},
     'mul' : {'func': mul, 'parm': [2,9], 'conn': clientConn, 'menu': 'mul '},
     'div' : {'func': div, 'parm': [6,3], 'conn': clientConn, 'menu': 'div '},
-    'gv'  : {'func':  gv, 'parm': [6,3], 'conn': clientConn, 'menu': 'gv  '},
+    'gv' : {'func':  gv, 'parm': [6,3], 'conn': clientConn, 'menu': 'gv  '},
     }
 
     while True:
